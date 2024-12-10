@@ -12,13 +12,22 @@
 
     <!-- Middle Section -->
     <div class="h-[60%] p-4 border-b">
+      <h2 class="text-xl font-semibold mb-4">Payout Management</h2>
       <PayoutForms />
     </div>
 
     <!-- Bottom Section -->
     <div class="h-[20%] p-4">
-      <PayToWallet />
-      <QuoteLookup />
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-xl font-semibold mb-4">Wallet Transfer</h2>
+          <PayToWallet />
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold mb-4">Quote Lookup</h2>
+          <QuoteLookup />
+        </div>
+      </div>
     </div>
   </div>
 </template>
