@@ -116,9 +116,9 @@
                         </div>
 
                         <!-- Conditional rendering based on destination type and country -->
-                        <template v-if="quoteDetails.beneficiary.destination.type === 'BANK'">
+                        <template v-if="quoteDetails?.beneficiary?.destination?.type === 'BANK'">
                             <!-- Australia Bank Details -->
-                            <template v-if="quoteDetails.beneficiary.country === 'AU'">
+                            <template v-if="quoteDetails?.beneficiary?.country === 'AU'">
                                 <div>
                                     <p class="text-sm text-gray-600">BSB Number</p>
                                     <div v-if="isAustralianBank(quoteDetails.beneficiary.destination)">
@@ -144,13 +144,13 @@
                                     <div v-if="isAustralianBank(quoteDetails.beneficiary.destination)">
                                         <p class="font-medium">{{
                                             formatRemittancePurpose(quoteDetails.beneficiary.destination.remittancePurpose)
-                                            }}</p>
+                                        }}</p>
                                     </div>
                                 </div>
                             </template>
 
                             <!-- Nigeria Bank Details -->
-                            <template v-if="quoteDetails.beneficiary.country === 'NG'">
+                            <template v-if="quoteDetails?.beneficiary?.country === 'NG'">
                                 <div>
                                     <div v-if="isNigerianBank(quoteDetails.beneficiary.destination)">
                                         <p class="font-medium">{{ quoteDetails.beneficiary.destination.bankCode }}</p>
@@ -165,7 +165,7 @@
 
                         <!-- Kenya Mobile Money Details -->
                         <template
-                            v-if="quoteDetails.beneficiary.destination.type === 'MOBILEMONEY' && quoteDetails.beneficiary.country === 'KE'">
+                            v-if="quoteDetails?.beneficiary?.destination?.type === 'MOBILEMONEY' && quoteDetails?.beneficiary?.country === 'KE'">
                             <div>
                                 <p class="text-sm text-gray-600">Network</p>
                                 <p class="font-medium">{{ quoteDetails.beneficiary.destination.network }}</p>
@@ -329,6 +329,8 @@ const lookupQuote = async () => {
         } else if (searchType.value === 'reference') {
             response = await getQuoteByReference(searchValue.value);
         }
+
+        console.log(response.data)
 
         quoteDetails.value = response.data;
         showNotification.value = true
