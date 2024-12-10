@@ -35,7 +35,7 @@ const amount = ref<number | null>(null)
 const isLoading = ref(false)
 const errorMessage = ref('')
 const showNotification = ref(false)
-const notificationType = ref('')
+const notificationType = ref<'success' | 'error'>('success')
 const notificationTitle = ref('')
 const notificationMessage = ref('')
 

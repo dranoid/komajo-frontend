@@ -494,7 +494,14 @@ interface FinalizeQuoteResponse {
     };
 }
 
-const nigeriaBankCodes = ref([])
+interface BankCode {
+    name: string;
+    value: string;
+}
+
+// Update the ref declaration to include the type
+const nigeriaBankCodes = ref<BankCode[]>([])
+
 
 const panelToShow = ref("create")
 const showQuotePanel = ref(false)
@@ -526,7 +533,7 @@ const initializeQuoteForm = reactive({
     reference: "",
     paymentReason: "",
     callbackUrl: "",
-    beneficiary: null as AustraliaBankDto | NigeriaBankDto | KenyaMobileMoneyDto | null,
+    beneficiary: undefined as AustraliaBankDto | NigeriaBankDto | KenyaMobileMoneyDto | undefined,
     clientMetaData: {
     }
 })
@@ -585,6 +592,8 @@ const updateBeneficiaryFields = () => {
         case 'kenya':
             initializeQuoteForm.beneficiary = kenyaBeneficiary
             break
+        default:
+            initializeQuoteForm.beneficiary = undefined
     }
 }
 
@@ -761,7 +770,7 @@ const clearInitializeQuoteForm = () => {
         reference: "",
         paymentReason: "",
         callbackUrl: "",
-        beneficiary: null,
+        beneficiary: undefined,
         clientMetaData: {
         }
     })
@@ -797,12 +806,12 @@ const clearFinalizeQuoteForm = () => {
     finalizeQuoteForm.quoteId = ""
 }
 
-function transformBankData(data) {
+function transformBankData(data: any) {
     // Navigate to the array of banks within the JSON structure
-    const banks = data?.data?.destination?.BANK?.find(field => field.name === "bankCode")?.banks || [];
+    const banks = data?.data?.destination?.BANK?.find((field: any) => field.name === "bankCode")?.banks || [];
 
     // Transform the array into the desired format
-    return banks.map(bank => ({
+    return banks.map((bank: any) => ({
         name: `${bank.bankName} (${bank.bankCode})`,
         value: bank.bankCode
     }));

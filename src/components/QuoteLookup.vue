@@ -121,29 +121,40 @@
                             <template v-if="quoteDetails.beneficiary.country === 'AU'">
                                 <div>
                                     <p class="text-sm text-gray-600">BSB Number</p>
-                                    <p class="font-medium">{{ quoteDetails.beneficiary.destination.BSBNumber }}</p>
+                                    <div v-if="isAustralianBank(quoteDetails.beneficiary.destination)">
+                                        <p class="font-medium">{{ quoteDetails.beneficiary.destination.BSBNumber }}</p>
+                                    </div>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Account Number</p>
-                                    <p class="font-medium">{{ quoteDetails.beneficiary.destination.accountNumber }}</p>
+                                    <div v-if="isAustralianBank(quoteDetails.beneficiary.destination)">
+                                        <p class="font-medium">{{ quoteDetails.beneficiary.destination.accountNumber }}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Account Name</p>
-                                    <p class="font-medium">{{ quoteDetails.beneficiary.destination.accountName }}</p>
+                                    <div v-if="isAustralianBank(quoteDetails.beneficiary.destination)">
+                                        <p class="font-medium">{{ quoteDetails.beneficiary.destination.accountName }}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Remittance Purpose</p>
-                                    <p class="font-medium">{{
-                                        formatRemittancePurpose(quoteDetails.beneficiary.destination.remittancePurpose)
-                                    }}</p>
+                                    <div v-if="isAustralianBank(quoteDetails.beneficiary.destination)">
+                                        <p class="font-medium">{{
+                                            formatRemittancePurpose(quoteDetails.beneficiary.destination.remittancePurpose)
+                                            }}</p>
+                                    </div>
                                 </div>
                             </template>
 
                             <!-- Nigeria Bank Details -->
                             <template v-if="quoteDetails.beneficiary.country === 'NG'">
                                 <div>
-                                    <p class="text-sm text-gray-600">Bank Code</p>
-                                    <p class="font-medium">{{ quoteDetails.beneficiary.destination.bankCode }}</p>
+                                    <div v-if="isNigerianBank(quoteDetails.beneficiary.destination)">
+                                        <p class="font-medium">{{ quoteDetails.beneficiary.destination.bankCode }}</p>
+                                    </div>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Account Number</p>
@@ -250,21 +261,6 @@ interface Beneficiary {
     destination: Destination;
 }
 
-interface ExchangeRate {
-    rate: number;
-    currency: string;
-}
-
-interface Trip {
-    submitted: string;
-    quoteSentAt: string;
-    assetReceived: string;
-    initializedAt: string;
-    completionTime: string;
-    processingStart: string;
-    timeToCompletion: number;
-}
-
 interface QuoteDetails {
     id: string;
     quoteId: string;
@@ -296,7 +292,7 @@ const searchType = ref<string>('quoteId')
 const searchValue = ref<string>('')
 const quoteDetails = ref<QuoteDetails | null>(null)
 const showNotification = ref(false)
-const notificationType = ref('')
+const notificationType = ref<'success' | 'error'>('success')
 const notificationTitle = ref('')
 const notificationMessage = ref('')
 
@@ -348,6 +344,13 @@ const lookupQuote = async () => {
     } finally {
         isLoading.value = false
     }
+}
+
+function isAustralianBank(beneficiary: any): beneficiary is AustraliaBankDestination {
+    return beneficiary?.type === 'BANK' && 'BSBNumber' in beneficiary;
+}
+function isNigerianBank(destination: any): destination is NigeriaBankDestination {
+    return destination?.type === 'BANK' && 'bankCode' in destination;
 }
 </script>
 

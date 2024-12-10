@@ -3,7 +3,7 @@ export interface CreatePayoutQuoteDto {
   fromAsset: string;
   toCurrency: string;
   chain: string;
-  amount: number;
+  amount?: number;
   settlementAmount?: number;
 }
 
