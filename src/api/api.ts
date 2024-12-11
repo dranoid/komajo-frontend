@@ -3,6 +3,7 @@ import {
   CreatePayoutQuoteDto,
   InitializePayoutQuoteDto,
   PayoutDto,
+  SingleTransactionDto,
 } from "./api.interface";
 
 // Create a configured axios instance
@@ -74,6 +75,16 @@ export const sendUSDTToWallet = async (payoutDto: PayoutDto) => {
 
 export const getSupportedCountries = async () => {
   const response = await api.get("/transaction/supported-countries");
+  return response.data;
+};
+
+export const singleTransaction = async (
+  singleTransactionDto: SingleTransactionDto
+) => {
+  const response = await api.post(
+    "/transaction/single-transaction",
+    singleTransactionDto
+  );
   return response.data;
 };
 

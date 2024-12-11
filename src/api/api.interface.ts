@@ -80,3 +80,11 @@ export interface KenyaMobileMoneyDto {
   accountName: string;
   accountNumber: string;
 }
+
+export interface SingleTransactionDto {
+  toCurrency: string;
+  amount: number;
+  paymentReason: string;
+  country: string;
+  beneficiary: NigeriaBankDto | KenyaMobileMoneyDto | AustraliaBankDto;
+}

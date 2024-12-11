@@ -153,6 +153,7 @@
                             <template v-if="quoteDetails?.beneficiary?.country === 'NG'">
                                 <div>
                                     <div v-if="isNigerianBank(quoteDetails.beneficiary.destination)">
+                                        <p class="text-sm text-gray-600">Bank Code</p>
                                         <p class="font-medium">{{ quoteDetails.beneficiary.destination.bankCode }}</p>
                                     </div>
                                 </div>
