@@ -791,6 +791,10 @@ const fetchNigeriaBankCodes = async () => {
         const response = await getWithdrawalRequirements("NG")
         nigeriaBankCodes.value = transformBankData(response)
     } catch (error) {
+        notificationType.value = 'error'
+        notificationTitle.value = 'Error'
+        notificationMessage.value = 'Failed to fetch nigerian banks'
+        showNotification.value = true
         console.error('Error fetching Nigeria bank codes:', error)
     }
 }
@@ -819,7 +823,6 @@ onMounted(async () => {
     const storedRates = localStorage.getItem('rates');
     if (storedRates) {
         rates.value = JSON.parse(storedRates);
-        return;
     }
 
     try {
