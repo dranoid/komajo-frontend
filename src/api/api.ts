@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  ConfirmTransactionDto,
   CreatePayoutQuoteDto,
   InitializePayoutQuoteDto,
   PayoutDto,
@@ -68,6 +69,16 @@ export const finalizeOfframpsQuote = async (finalizeObj: {
   return response.data;
 };
 
+export const confirmTransaction = async (
+  confirmTransactionDto: ConfirmTransactionDto
+) => {
+  const response = await api.post(
+    "/transaction/payouts/confirm",
+    confirmTransactionDto
+  );
+  return response.data;
+};
+
 export const sendUSDTToWallet = async (payoutDto: PayoutDto) => {
   const response = await api.post("/transaction/send-usdt", payoutDto);
   return response.data;
@@ -85,6 +96,12 @@ export const singleTransaction = async (
     "/transaction/single-transaction",
     singleTransactionDto
   );
+  return response.data;
+};
+
+export const getAllQuotes = async (page: number) => {
+  if (!page) page = 1;
+  const response = await api.get(`/transaction?page=${page}`);
   return response.data;
 };
 

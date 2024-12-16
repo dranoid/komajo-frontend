@@ -88,3 +88,67 @@ export interface SingleTransactionDto {
   country: string;
   beneficiary: NigeriaBankDto | KenyaMobileMoneyDto | AustraliaBankDto;
 }
+
+export interface ConfirmTransactionDto {
+  source: "onchain" | "offchain";
+  fromAsset: string;
+  toCurrency: string;
+  chain: "trc20" | "erc20" | "mainnet" | "lightning";
+  amount?: number;
+  settlementAmount?: number;
+  paymentReason: string;
+  beneficiary: AustraliaBankDto | NigeriaBankDto | KenyaMobileMoneyDto;
+  country: string;
+}
+
+export interface Transaction {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  quoteId: string;
+  companyId: string;
+  customerId: string;
+  paymentReason: string;
+  reference: string;
+  callbackUrl: string;
+  beneficiaryId: string;
+  status: string;
+  exchangeRate: {
+    rate: number;
+    currency: string;
+  };
+  beneficiary: {
+    id: string;
+    status: string;
+    country: string;
+    currency: string;
+    createdAt: string;
+    reference: string;
+    updatedAt: string;
+    destination: NigeriaBankDto | AustraliaBankDto | KenyaMobileMoneyDto;
+  };
+  trip: {
+    submitted: string | null;
+    quoteSentAt: string;
+    assetReceived: string | null;
+    initializedAt: string;
+    completionTime: string | null;
+    processingStart: string | null;
+    timeToCompletion: string | null;
+  };
+  clientMetaData: {};
+  satAmount: string;
+  btcAmount: string;
+  amount: string;
+  centAmount: string;
+  settlementAmount: number;
+  centFees: string;
+  fees: string;
+  address: string;
+  source: string;
+  fromAsset: string;
+  chain: string;
+  toCurrency: string;
+  paymentETA: string;
+  expiry: string;
+}
