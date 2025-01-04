@@ -7,9 +7,11 @@ import {
   SingleTransactionDto,
 } from "./api.interface";
 
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 // Create a configured axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  baseURL: apiUrl,
   headers: {
     "Content-Type": "application/json",
   },
