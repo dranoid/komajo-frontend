@@ -132,7 +132,7 @@ import { computed, onMounted, ref } from 'vue'
 import TransactionModal from './TransactionModal.vue';
 import Notification from './Notification.vue';
 import ViewTransactionModal from './ViewTransactionModal.vue';
-import { getAllQuotes } from '../api/api';
+import { getAllQuotes, getWithdrawalRequirements } from '../api/api';
 import { Transaction } from '../api/api.interface';
 
 
@@ -144,41 +144,8 @@ const isTransactionModalOpen = ref(false)
 const currentPage = ref(1)
 const totalPages = ref(1)
 
-// Mock transactions data - replace with actual API call
-const transactions = ref<Transaction[]>([
-    // {
-    //     id: "b07fe2fb-493a-4e14-ad39-38860ff3bbd4",
-    //     fees: 0,
-    //     chain: "trc20",
-    //     amount: 200,
-    //     status: "pending_address_deposit",
-    //     address: "TAWaGAiepeLic6ZMqNANkKf1LtzWLFTcop",
-    //     quoteId: "QT_5145",
-    //     fromAsset: "usdt",
-    //     reference: "gUjvTWv0sj8vIFY",
-    //     paymentETA: "3-5 minutes",
-    //     exchangeRate: 1649.39,
-    //     expiresInText: "This invoice expires in 15 minutes",
-    //     paymentReason: "Funds for stuff",
-    //     expiryTimeStamp: 1734132989,
-    //     settlementAmount: 329878,
-    //     beneficiaryDetails: {
-    //         id: "1901a327-bff0-4dc3-b2da-bf38b48b3017",
-    //         status: "success",
-    //         country: "NG",
-    //         currency: "NGN",
-    //         createdAt: "2024-12-13T23:20:27.277Z",
-    //         reference: "QT_5145_a777c2beb901",
-    //         updatedAt: "2024-12-13T23:20:27.277Z",
-    //         destination: {
-    //             type: "BANK",
-    //             bankCode: "000014",
-    //             accountNumber: "1421795566"
-    //         }
-    //     },
-    //     settlementCurrency: "ngn"
-    // }
-])
+
+const transactions = ref<Transaction[]>([])
 
 const isViewTransactionModalOpen = ref(false);
 const selectedTransaction = ref<Transaction | null>(null);
@@ -203,6 +170,7 @@ const notificationTitle = ref('')
 const notificationMessage = ref('')
 
 onMounted(async () => {
+    fetchNigeriaBankCodes()
     getTransactions(1)
 })
 
@@ -285,6 +253,30 @@ const formatNumber = (num: number): string => {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
+}
+
+const fetchNigeriaBankCodes = async () => {
+    try {
+        const response = await getWithdrawalRequirements("NG")
+        transformBankData(response)
+    } catch (error) {
+        notificationType.value = 'error'
+        notificationTitle.value = 'Error'
+        notificationMessage.value = 'Failed to fetch nigerian banks'
+        showNotification.value = true
+        console.error('Error fetching Nigeria bank codes:', error)
+    }
+}
+
+function transformBankData(data: any) {
+    const banks = data?.data?.destination?.BANK?.find((field: any) => field.name === "bankCode")?.banks || [];
+    const sanitized = banks.map((bank: any) => ({
+        name: `${bank.bankName} (${bank.bankCode})`,
+        value: bank.bankCode,
+        bankName: bank.bankName
+    }));
+    localStorage.setItem('nigeriaBankCodes', JSON.stringify(sanitized)); // Save to local storage
+    return sanitized;
 }
 </script>
 
